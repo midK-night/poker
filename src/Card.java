@@ -1,7 +1,7 @@
 public class Card {
-    private int suit;
-    private int rank;
-    private int value;
+    private final int suit;
+    private final int rank;
+    private final int value;
     static int[] suits = {0X1000, 0X2000, 0X4000, 0X8000};
 
     public Card(int s, int v) {

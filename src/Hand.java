@@ -1,22 +1,16 @@
 import java.util.*;
 
 public class Hand {
-    private ArrayList<Card> cards;
+    private final ArrayList<Card> cards;
     public Hand(pokerTable p, Person c) {
         cards = new ArrayList<>();
-        for (int i = 0; i < p.getTable().size(); i++) {
-            cards.add(p.getTable().get(i));
-        }
+        cards.addAll(p.getTable());
 
         boolean personIsBot = c.getType() == 1;
         if (personIsBot) {
-            for (int i = 0; i < c.getBot().getHand().size(); i++) {
-                cards.add(c.getBot().getHand().get(i));
-            }
+            cards.addAll(c.getBot().getHand());
         } else {
-            for (int i = 0; i < c.getPlayer().getHand().size(); i++) {
-                cards.add(c.getPlayer().getHand().get(i));
-            }
+            cards.addAll(c.getPlayer().getHand());
         }
     }
 
@@ -76,8 +70,8 @@ public class Hand {
 
         int temp = 7500;
 
-        for (int i = 0; i < values.length; i++) {
-            temp = Math.min(temp, values[i]);
+        for (int value : values) {
+            temp = Math.min(temp, value);
         }
 
         return temp;

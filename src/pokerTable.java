@@ -90,10 +90,10 @@ public class pokerTable {
     }
 
     public String tableToString(ArrayList<Card> table) {
-        String str = "\nThe cards on the table are: \n";
-        for (int i = 0; i < table.size(); i++) {
-            str += table.get(i).toString() + "\n";
+        StringBuilder str = new StringBuilder("\nThe cards on the table are: \n");
+        for (Card card : table) {
+            str.append(card.toString()).append("\n");
         }
-        return str;
+        return str.toString();
     }
 }
