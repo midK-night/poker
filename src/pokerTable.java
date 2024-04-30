@@ -4,10 +4,16 @@ import java.util.Scanner;
 public class pokerTable {
     static ArrayList<Card> table;
     public pokerTable() { table = new ArrayList<>(); }
-    public int gameLoop(int bots, int w) {
-        int pool = 0;
+    public double gameLoop(int bots, double w) {
         Deck d = new Deck(bots);
         Player p = new Player(d, w);
+        int pool = 0;
+        int bet;
+
+        System.out.println("\nYou chip in 10");
+        w -= 10;
+        pool += 10 * (bots + 1);
+
         System.out.println("\nYour hand is \n" + p.getHand().get(0).toString() + "\n" + p.getHand().get(1).toString());
         table.add(d.retrieveCard());
         table.add(d.retrieveCard());
@@ -15,7 +21,7 @@ public class pokerTable {
 
         System.out.println(tableToString(table));
 
-        int bet = betTurn(w);
+        bet = betTurn(w);
         w -= bet;
         pool += (bet * (bots + 1));
         if (bet == -1) {
@@ -59,7 +65,7 @@ public class pokerTable {
         return table;
     }
 
-    public int betTurn(int w) {
+    public int betTurn(double w) {
         Scanner console = new Scanner(System.in);
         int bet = 0;
         boolean valid = false;
@@ -84,7 +90,7 @@ public class pokerTable {
     }
 
     public String tableToString(ArrayList<Card> table) {
-        String str = "\nThe card added to the table is: \n";
+        String str = "\nThe cards on the table are: \n";
         for (int i = 0; i < table.size(); i++) {
             str += table.get(i).toString() + "\n";
         }

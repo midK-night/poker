@@ -62,7 +62,7 @@ public class Hand {
         int valuesTracker = 0;
         ArrayList<Card> tempCards = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
-            for (int j = 0; j < cards.size() - 1; j++) {
+            for (int j = 0; j < cards.size() - 1 && j != i; j++) {
                 for (int k = 0; k < cards.size(); k++) {
                     if (k != i && k != j) {
                         tempCards.add(cards.get(k));
@@ -70,6 +70,7 @@ public class Hand {
                 }
                 values[valuesTracker] = evaluate(tempCards.toArray(new Card[0]));
                 valuesTracker++;
+                tempCards.clear();
             }
         }
 

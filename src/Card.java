@@ -2,17 +2,13 @@ public class Card {
     private int suit;
     private int rank;
     private int value;
-    static int[] primes = {41, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
+    static int[] suits = {0X1000, 0X2000, 0X4000, 0X8000};
 
     public Card(int s, int v) {
         suit = s;
         rank = v;
 
-        value = (1 << (rank + 16)) | suit | (rank << 8) | Tables.PRIMES[rank];
-    }
-
-    public int getSuit() {
-        return suit;
+        value = (1 << (rank + 16)) | suits[suit] | (rank << 8) | Tables.PRIMES[rank];
     }
 
     int getValue() {
@@ -21,7 +17,7 @@ public class Card {
 
     public String toString() {
         String str = "";
-        switch (value) {
+        switch (rank) {
             case 0:
                 str += "Ace";
                 break;
@@ -65,16 +61,16 @@ public class Card {
         str += " of ";
         switch (suit) {
             case 0:
-                str += "clubs";
+                str += "spades";
                 break;
             case 1:
-                str += "diamonds";
-                break;
-            case 2:
                 str += "hearts";
                 break;
+            case 2:
+                str += "diamonds";
+                break;
             case 3:
-                str += "spades";
+                str += "clubs";
                 break;
         }
         return str;
