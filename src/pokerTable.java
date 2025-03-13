@@ -57,7 +57,7 @@ public class pokerTable {
         }
 
         w += pool;
-        System.out.println("You Won! \nYou gained " + pool + " credits");
+        System.out.println("You Won! \nYou gained the pot of " + pool + " credits");
         return w;
     }
 
