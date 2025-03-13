@@ -79,6 +79,33 @@ public class Hand {
         return temp;
     }
 
+    public int getTemporaryHandValue() {
+        ArrayList<Integer> vals = new ArrayList<>();
+        ArrayList<Card> tempCards = new ArrayList<>();
+
+        if (tempCards.size() == 5) {
+            vals.add(evaluate(tempCards.toArray(new Card[0])));
+        } else {
+            for (int i = 0; i < cards.size(); i++) {
+                for (int k = 0; k < cards.size(); k++) {
+                    if (k != i) {
+                        tempCards.add(cards.get(k));
+                    }
+                }
+                vals.add(evaluate(tempCards.toArray(new Card[0])));
+                tempCards.clear();
+            }
+        }
+
+        int temp = 7500;
+
+        for (int value : vals) {
+            temp = Math.min(temp, value);
+        }
+
+        return temp;
+    }
+
     private static boolean hasDuplicates(int[] values) {
         Arrays.sort(values);
         for (int i = 1; i < values.length; i++) {
