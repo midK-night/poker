@@ -15,13 +15,14 @@ public class PokerRunner {
         System.out.print("How much money are you entering into the game?: $");
         w = console.nextDouble();
 
-        System.out.print("How large is the table you're playing at? (# of people): ");
+        System.out.print("How large is the table you're playing at? (# of other people): ");
         b = console.nextInt();
         console.nextLine();
 
         while (!gameOver) {
             w = table.gameLoop(b, w);
             table.resetGame();
+            System.out.println("\nCurrent wallet: " + w);
             System.out.print("Would you like to keep playing? (Y/N): ");
             gameOver = console.nextLine().equalsIgnoreCase("n");
         }
