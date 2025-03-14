@@ -61,6 +61,10 @@ public class pokerTable {
         return w;
     }
 
+    public void resetGame() {
+        table.clear();
+    }
+
     public ArrayList<Card> getTable() {
         return table;
     }

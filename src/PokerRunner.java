@@ -21,6 +21,7 @@ public class PokerRunner {
 
         while (!gameOver) {
             w = table.gameLoop(b, w);
+            table.resetGame();
             System.out.print("Would you like to keep playing? (Y/N): ");
             gameOver = console.nextLine().equalsIgnoreCase("n");
         }
