@@ -52,22 +52,10 @@ public class Hand {
     }
 
     public int getRelativeHandRank() {
-        int[] values = new int[21];
-        int valuesTracker = 0;
-        ArrayList<Card> tempCards = new ArrayList<>();
-        for (int i = 0; i < cards.size(); i++) {
-            for (int j = 0; j < cards.size(); j++) {
-                if (j != i) {
-                    for (int k = 0; k < cards.size(); k++) {
-                        if (k != i && k != j) {
-                            tempCards.add(cards.get(k));
-                        }
-                    }
-                    values[valuesTracker] = evaluate(tempCards.toArray(new Card[0]));
-                    valuesTracker++;
-                    tempCards.clear();
-                }
-            }
+        ArrayList<Integer> values = new ArrayList<>();
+        ArrayList<Card[]> combinations = generateCombinations(0, 0, new Card[5]);
+        for (int i = 0; i < combinations.size(); i++) {
+            values.add(evaluate(combinations.get(i)));
         }
 
         int temp = 7500;
@@ -79,31 +67,20 @@ public class Hand {
         return temp;
     }
 
-    public int getTemporaryHandValue() {
-        ArrayList<Integer> vals = new ArrayList<>();
-        ArrayList<Card> tempCards = new ArrayList<>();
+    private ArrayList<Card[]> generateCombinations (int start, int index, Card[] temp) {
+        ArrayList<Card[]> combinations = new ArrayList<>();
 
-        if (tempCards.size() == 5) {
-            vals.add(evaluate(tempCards.toArray(new Card[0])));
-        } else {
-            for (int i = 0; i < cards.size(); i++) {
-                for (int k = 0; k < cards.size(); k++) {
-                    if (k != i) {
-                        tempCards.add(cards.get(k));
-                    }
-                }
-                vals.add(evaluate(tempCards.toArray(new Card[0])));
-                tempCards.clear();
-            }
+        if (index == 5) { // base case
+            combinations.add(temp.clone());
+            return combinations;
         }
 
-        int temp = 7500;
-
-        for (int value : vals) {
-            temp = Math.min(temp, value);
+        for (int i = start; i < cards.size() - (5 - index); i++) {
+            temp[index] = cards.get(i);
+            combinations.addAll(generateCombinations(i + 1, index + 1, temp));
         }
 
-        return temp;
+        return combinations;
     }
 
     private static boolean hasDuplicates(int[] values) {
