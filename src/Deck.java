@@ -17,7 +17,7 @@ public class Deck {
     }
 
     public void updateDeck(int s, int v) {
-        isDrafted[s][v] = false;
+        isDrafted[s][v] = true;
     }
 
     public Card retrieveCard() {
