@@ -9,7 +9,7 @@ public class PokerRunner {
         boolean gameOver = false;
 
         System.out.println("**************************************************");
-        System.out.println("     THE    POKER   TABLE   - $10 chip in ");
+        System.out.println("     THE    POKER   TABLE   -   $10 chip in ");
         System.out.println("**************************************************");
 
         System.out.print("How much money are you entering into the game?: $");
