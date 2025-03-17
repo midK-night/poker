@@ -3,37 +3,67 @@ import java.util.ArrayList;
 public class Bot {
     private ArrayList<Card> hand;
     private boolean isActive;
+    private boolean notFirstTurn;
+    private int turnBet;
 
-    public Bot (Deck d) {
+    public Bot (Deck d, int num) {
         hand = new ArrayList<>(2);
         hand.add(d.retrieveCard());
         hand.add(d.retrieveCard());
         isActive = true;
+        notFirstTurn = false;
     }
 
     public ArrayList<Card> getHand() {
         return hand;
     }
 
-    public int turnBet (pokerTable p, int curBet) {
+    public void betTurn(pokerTable p, int curBet) {
         if (!isActive) {
-            return Integer.MIN_VALUE;
+            turnBet = 0;
+            return;
         }
+
+        notFirstTurn = true;
+
         Hand current = new Hand(p, new Person(this));
-        int val = current.getTemporaryHandValue();
+        int val = current.getRelativeHandRank();
         double percentage = 1 - (val / 7462.0);
 
         if (percentage < 0.1) { //bottom 10% of hands -> fold
             isActive = false;
-            return -1;
+            turnBet = -1;
+            System.out.println("Bot " + getNum() + " folds.");
+            return;
         }
 
-        if (percentage < 0.5) { // bottom 50% of hands -> call
-            return curBet;
+        if (percentage < 0.7 || notFirstTurn) { // bottom 70% of hands -> call
+            turnBet = curBet;
+            System.out.println("Bot " + getNum() + " calls.");
+            return;
         }
 
         //raise
         int percen10 = (int) (5 - (percentage * 10));
-        return (percen10 * 5) + curBet;
+        turnBet = (percen10 * 5) + curBet;
+        System.out.println("Bot " + getNum() + " raises by " + (percen10 * 5) +
+                ".\nThe bet for this round is now " + turnBet + ".");
+    }
+
+    public void resetTurn () {
+        notFirstTurn = false;
+        turnBet = 0;
+    }
+
+    public int getBet () {
+        return turnBet;
+    }
+
+    public boolean betCurrent (int curBet) {
+        return turnBet == curBet;
+    }
+
+    public boolean getIsActive () {
+        return isActive;
     }
 }
