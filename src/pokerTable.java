@@ -52,7 +52,7 @@ public class pokerTable {
 
         boolean win = max == 0;
         if (!win) {
-            System.out.println("Bot " + max + " won");
+            System.out.println("Bot " + d.getBots().get(max).getNum() + " won");
             return w;
         }
 
@@ -92,6 +92,7 @@ public class pokerTable {
         }
         return bet;
     }
+
 
     public String tableToString(ArrayList<Card> table) {
         StringBuilder str = new StringBuilder("\nThe cards on the table are: \n");
