@@ -39,6 +39,7 @@ public class Player {
             notFirstTurn = true;
         }
 
+        turnBet = curBet;
         if (choice.equalsIgnoreCase("raise")) {
             valid = false;
             while (!valid) {
@@ -46,11 +47,11 @@ public class Player {
                 bet = console.nextInt();
                 valid = bet < wallet;
             }
-            return bet + curBet;
+            turnBet += bet;
         } else if (choice.equalsIgnoreCase("fold")) {
-            return -1;
+            turnBet = -1;
         }
-        return curBet;
+        return turnBet;
     }
 
     public void resetTurn () {
@@ -59,5 +60,9 @@ public class Player {
 
     public boolean betCurrent (int curBet) {
         return turnBet == curBet;
+    }
+
+    public void setWallet (double wallet) {
+        Player.wallet = wallet;
     }
 }
