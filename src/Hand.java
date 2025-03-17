@@ -53,9 +53,12 @@ public class Hand {
 
     public int getRelativeHandRank() {
         ArrayList<Integer> values = new ArrayList<>();
-        ArrayList<Card[]> combinations = generateCombinations(0, 0, new Card[5]);
+        ArrayList<ArrayList<Card>> combinations = new ArrayList<>();
+        generateCombinations(cards, combinations, new ArrayList<Card>(), 0);
+
         for (int i = 0; i < combinations.size(); i++) {
-            values.add(evaluate(combinations.get(i)));
+            Card[] temp = new Card[combinations.get(i).size()];
+            values.add(evaluate(combinations.get(i).toArray(temp)));
         }
 
         int temp = 7500;
@@ -67,20 +70,16 @@ public class Hand {
         return temp;
     }
 
-    private ArrayList<Card[]> generateCombinations (int start, int index, Card[] temp) {
-        ArrayList<Card[]> combinations = new ArrayList<>();
-
-        if (index == 5) { // base case
-            combinations.add(temp.clone());
-            return combinations;
+    private void generateCombinations (ArrayList<Card> input, ArrayList<ArrayList<Card>> result, ArrayList<Card> inProgress, int x) {
+        if (inProgress.size() == 5) {
+            result.add((ArrayList<Card>) inProgress.clone());
+        } else {
+            for (int i = x; i < input.size(); i++) {
+                inProgress.add(input.get(i));
+                generateCombinations(input, result, inProgress, i + 1);
+                inProgress.removeLast();
+            }
         }
-
-        for (int i = start; i < cards.size() - (5 - index); i++) {
-            temp[index] = cards.get(i);
-            combinations.addAll(generateCombinations(i + 1, index + 1, temp));
-        }
-
-        return combinations;
     }
 
     private static boolean hasDuplicates(int[] values) {
