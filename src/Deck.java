@@ -8,7 +8,7 @@ public class Deck {
         isDrafted = new boolean[4][13];
         this.bots = new ArrayList<Bot>(bots);
         for (int i = 0; i < bots; i++) {
-            this.bots.add(new Bot(this));
+            this.bots.add(new Bot(this, i));
         }
     }
 

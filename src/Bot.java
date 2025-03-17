@@ -5,6 +5,7 @@ public class Bot {
     private boolean isActive;
     private boolean notFirstTurn;
     private int turnBet;
+    private int num;
 
     public Bot (Deck d, int num) {
         hand = new ArrayList<>(2);
@@ -12,6 +13,7 @@ public class Bot {
         hand.add(d.retrieveCard());
         isActive = true;
         notFirstTurn = false;
+        this.num = num;
     }
 
     public ArrayList<Card> getHand() {
@@ -61,6 +63,10 @@ public class Bot {
 
     public boolean betCurrent (int curBet) {
         return turnBet == curBet;
+    }
+
+    public int getNum () {
+        return num;
     }
 
     public boolean getIsActive () {
