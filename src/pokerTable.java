@@ -21,10 +21,10 @@ public class pokerTable {
 
         System.out.println(tableToString(table));
 
-        bet = betTurn(w);
-        w -= bet;
-        pool += (bet * (bots + 1));
-        if (bet == -1) {
+        double[] turnResult = gameLoopTurn(d, p, w, pool);
+        w = turnResult[1];
+        pool = (int) turnResult[2];
+        if (turnResult[0] < 0) {
             return w;
         }
 
@@ -32,16 +32,23 @@ public class pokerTable {
         System.out.println("\nThe card added to the table is: \n" + table.get(3).toString());
         System.out.println(tableToString(table));
 
-        bet = betTurn(w);
-        w -= bet;
-        pool += (bet * (bots + 1));
-        if (bet == -1) {
+        turnResult = gameLoopTurn(d, p, w, pool);
+        w = turnResult[1];
+        pool = (int) turnResult[2];
+        if (turnResult[0] < 0) {
             return w;
         }
 
         table.add(d.retrieveCard());
         System.out.println("\nThe final card added to the table is: \n" + table.get(4).toString());
         System.out.println(tableToString(table));
+
+        turnResult = gameLoopTurn(d, p, w, pool);
+        w = turnResult[1];
+        pool = (int) turnResult[2];
+        if (turnResult[0] < 0) {
+            return w;
+        }
 
         int max = 0;
         for (int i = 0; i < d.getBots().size(); i++) {
@@ -69,28 +76,43 @@ public class pokerTable {
         return table;
     }
 
-    public int betTurn(double w) {
-        Scanner console = new Scanner(System.in);
-        int bet = 0;
-        boolean valid = false;
-        String choice = "";
-        while (!valid) {
-            System.out.print("Would you like to raise, hold, or fold? >>> ");
-            choice = console.nextLine();
-            valid = choice.equalsIgnoreCase("raise") || choice.equalsIgnoreCase("hold") || choice.equalsIgnoreCase("fold");
+    public double[] gameLoopTurn (Deck d, Player p, double w, int pool) {
+        ArrayList<Bot> b = d.getBots();
+        double[] returnVar = {0, w, pool}; // -1/0 for player status, wallet status, pool status
+
+        int curBet = 0;
+        int firstBet = p.betTurn(0);
+        if (firstBet == -1) {
+            returnVar[0] = -1;
+            return returnVar;
+        }
+        curBet = firstBet;
+
+
+        for (Bot bot : b) {
+            bot.betTurn(this, curBet);
+            if (bot.getBet() > 0) {
+                curBet = bot.getBet();
+            }
         }
 
-        if (choice.equalsIgnoreCase("raise")) {
-            valid = false;
-            while (!valid) {
-                System.out.print("How much would you like to raise by? >>> ");
-                bet = console.nextInt();
-                valid = bet < w;
-            }
-        } else if (choice.equalsIgnoreCase("fold")) {
-            bet = -1;
+        if (!p.betCurrent(curBet) && p.betTurn(curBet) == -1) {
+            returnVar[1] -= firstBet;
+            return returnVar;
         }
-        return bet;
+        returnVar[1] -= curBet;
+        returnVar[2] += curBet;
+        p.resetTurn();
+        p.setWallet(returnVar[1]);
+
+        for (Bot bot : b) {
+            if (!bot.betCurrent(curBet)) {
+                bot.betTurn(this, curBet);
+            }
+            returnVar[2] += bot.getBet();
+            bot.resetTurn();
+        }
+        return returnVar;
     }
 
 
