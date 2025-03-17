@@ -52,8 +52,10 @@ public class pokerTable {
 
         int max = 0;
         for (int i = 0; i < d.getBots().size(); i++) {
-            if (new Hand(this, new Person(d.getBots().get(i))).getRelativeHandRank() < new Hand(this, new Person(p)).getRelativeHandRank() ) {
-                max = i;
+            if (d.getBots().get(i).getIsActive()) {
+                if (new Hand(this, new Person(d.getBots().get(i))).getRelativeHandRank() < new Hand(this, new Person(p)).getRelativeHandRank()) {
+                    max = i;
+                }
             }
         }
 
